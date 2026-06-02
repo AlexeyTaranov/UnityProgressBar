@@ -1,6 +1,6 @@
 {
     "name": "com.annulusgames.ugui-progress-bar",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "displayName": "Progress Bar",
     "description": "Simple and robust progress bar components for Unity uGUI.",
     "unity": "2019.1",

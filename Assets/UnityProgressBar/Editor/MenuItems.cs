@@ -32,7 +32,7 @@ namespace UnityProgressBar.Editor
         {
             var obj = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(assetPath));
 
-            var canvas = Object.FindObjectOfType<Canvas>();
+            var canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
             {
                 canvas = new GameObject("Canvas").AddComponent<Canvas>();
@@ -40,7 +40,7 @@ namespace UnityProgressBar.Editor
                 canvas.gameObject.AddComponent<CanvasScaler>();
                 canvas.gameObject.AddComponent<GraphicRaycaster>();
 
-                if (Object.FindObjectOfType<EventSystem>() == null)
+                if (FindObjectOfType<EventSystem>() == null)
                 {
                     _ = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
                 }
@@ -53,6 +53,15 @@ namespace UnityProgressBar.Editor
 
             Undo.RegisterCreatedObjectUndo(obj, "Create " + objectName);
             Selection.activeGameObject = obj;
+        }
+
+        static T FindObjectOfType<T>() where T : Object
+        {
+#if UNITY_2023_1_OR_NEWER || UNITY_6000_0_OR_NEWER
+            return Object.FindAnyObjectByType<T>();
+#else
+            return Object.FindObjectOfType<T>();
+#endif
         }
     }
 }
