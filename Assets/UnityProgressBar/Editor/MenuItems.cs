@@ -7,30 +7,33 @@ namespace UnityProgressBar.Editor
 {
     static class MenuItems
     {
-        [MenuItem("GameObject/UI/Progress Bar/Progress Bar - Fill")]
-        public static void CreateFillProgressBar()
+        const int MenuPriority = 10;
+
+        [MenuItem("GameObject/UI/Progress Bar/Progress Bar - Fill", false, MenuPriority)]
+        public static void CreateFillProgressBar(MenuCommand menuCommand)
         {
             var path = "Packages/com.annulusgames.ugui-progress-bar/Editor/DefaultAssets/Progress Bar - Fill.prefab";
-            CreateUIItem(path, "Progress Bar");
+            CreateUIItem(path, "Progress Bar", menuCommand);
         }
 
-        [MenuItem("GameObject/UI/Progress Bar/Circular Progress Bar")]
-        public static void CreateCircularFillProgressBar()
+        [MenuItem("GameObject/UI/Progress Bar/Circular Progress Bar", false, MenuPriority + 1)]
+        public static void CreateCircularFillProgressBar(MenuCommand menuCommand)
         {
             var path = "Packages/com.annulusgames.ugui-progress-bar/Editor/DefaultAssets/Circular Progress Bar.prefab";
-            CreateUIItem(path, "Circular Progress Bar");
+            CreateUIItem(path, "Circular Progress Bar", menuCommand);
         }
 
-        [MenuItem("GameObject/UI/Progress Bar/Progress Bar - Stretch")]
-        public static void CreateStretchProgressBar()
+        [MenuItem("GameObject/UI/Progress Bar/Progress Bar - Stretch", false, MenuPriority + 2)]
+        public static void CreateStretchProgressBar(MenuCommand menuCommand)
         {
             var path = "Packages/com.annulusgames.ugui-progress-bar/Editor/DefaultAssets/Progress Bar - Stretch.prefab";
-            CreateUIItem(path, "Progress Bar");
+            CreateUIItem(path, "Progress Bar", menuCommand);
         }
 
-        static void CreateUIItem(string assetPath, string objectName)
+        static void CreateUIItem(string assetPath, string objectName, MenuCommand menuCommand)
         {
-            var obj = Object.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(assetPath));
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+            var obj = Object.Instantiate(prefab);
 
             var canvas = FindObjectOfType<Canvas>();
             if (canvas == null)
@@ -47,7 +50,7 @@ namespace UnityProgressBar.Editor
             }
 
             obj.name = objectName;
-            obj.transform.SetParent(canvas.transform);
+            GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject ?? canvas.gameObject);
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localScale = Vector3.one;
 
